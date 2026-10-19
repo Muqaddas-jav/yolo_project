@@ -1,0 +1,31 @@
+name: Architectural Electrical YOLO CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Core Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy opencv-python pillow pyyaml pymupdf
+          pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install ultralytics
+
+      - name: Run Unit Tests
+        run: |
+          python -m unittest discover -s tests

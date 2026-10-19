@@ -1,0 +1,21 @@
+# YOLO Dataset Configuration for Architectural Electrical Plan Sheets
+path: C:/Users/admin/Documents/GitHub/hat/data/tiles
+train: images/train
+val: images/val
+test: images/val
+
+# Class definitions based on architectural electrical plan symbology
+names:
+  0: ceiling_mounted_light
+  1: recessed_down_light
+  2: emergency_light
+  3: receptacle_duplex
+  4: nurse_call
+  5: telephone_outlet
+  6: tv_outlet
+  7: smoke_detector
+  8: switch
+  9: electrical_panel
+  10: junction_box
+  11: exit_sign
+  12: fire_alarm_strobe

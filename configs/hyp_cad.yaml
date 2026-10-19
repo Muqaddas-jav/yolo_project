@@ -1,0 +1,36 @@
+# Hyperparameter configuration tailored for 2D Architectural CAD/PDF drawings
+# Optimized for small vector symbols, dense line networks, and orientation invariance.
+
+lr0: 0.001           # initial learning rate (SGD=1E-2, AdamW=1E-3)
+lrf: 0.01            # final learning rate (lr0 * lrf)
+momentum: 0.937      # SGD momentum/Adam beta1
+weight_decay: 0.0005 # optimizer weight decay 5e-4
+warmup_epochs: 3.0   # warmup epochs
+warmup_momentum: 0.8 # warmup initial momentum
+warmup_bias_lr: 0.1  # warmup initial bias lr
+box: 7.5             # box loss gain (higher emphasis on tight small-object bounding)
+cls: 0.5             # cls loss gain (scale with pixels)
+dfl: 1.5             # dfl loss gain
+pose: 12.0
+kobj: 1.0
+label_smoothing: 0.0
+nbs: 64
+
+# CAD-Specific Augmentations
+hsv_h: 0.0           # image HSV-Hue augmentation (0 for monochrome CAD)
+hsv_s: 0.0           # image HSV-Saturation augmentation (0 for monochrome CAD)
+hsv_v: 0.2           # image HSV-Value augmentation (adjust line contrast)
+degrees: 180.0       # 360-degree rotation invariance for wall-mounted devices
+translate: 0.1       # image translation (+/- fraction)
+scale: 0.2           # image scale (+/- gain) - CAD symbols have strict scale ratios
+shear: 1.0           # image shear (+/- deg)
+perspective: 0.0     # 0 perspective distortion (orthographic 2D floor plans)
+flipud: 0.5          # floor plans have valid top/bottom symmetry
+fliplr: 0.5          # floor plans frequently mirror rooms (e.g. adjacent units)
+bgr: 0.0
+mosaic: 0.4          # reduced mosaic to prevent severing thin electrical line arcs
+mixup: 0.0           # disabled mixup to avoid confusing overlapping circuit lines
+copy_paste: 0.15     # copy-paste augmentation for rare electrical symbols
+auto_augment: randaugment
+erasing: 0.1         # simulate scanner defects or CAD dimension line interruptions
+crop_fraction: 1.0

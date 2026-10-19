@@ -1,0 +1,342 @@
+{
+  "sheet": "E-101",
+  "sheet_title": "Dual Patient Unit Electrical Floor Plan",
+  "dimensions": {
+    "width": 1024,
+    "height": 683
+  },
+  "total_count": 36,
+  "summary_counts": {
+    "ceiling_mounted_light": 8,
+    "recessed_down_light": 4,
+    "switch": 8,
+    "receptacle_duplex": 6,
+    "nurse_call": 4,
+    "telephone_outlet": 4,
+    "tv_outlet": 2,
+    "smoke_detector": 2,
+    "emergency_light": 2
+  },
+  "detections": [
+    {
+      "type": "telephone_outlet",
+      "confidence": 0.94,
+      "x": 58.0,
+      "y": 72.0,
+      "width": 26.0,
+      "height": 25.0
+    },
+    {
+      "type": "nurse_call",
+      "confidence": 0.96,
+      "x": 57.0,
+      "y": 104.0,
+      "width": 42.0,
+      "height": 25.0
+    },
+    {
+      "type": "recessed_down_light",
+      "confidence": 0.95,
+      "x": 74.0,
+      "y": 140.0,
+      "width": 32.0,
+      "height": 30.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.92,
+      "x": 60.0,
+      "y": 191.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.97,
+      "x": 57.0,
+      "y": 208.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "telephone_outlet",
+      "confidence": 0.93,
+      "x": 58.0,
+      "y": 257.0,
+      "width": 26.0,
+      "height": 25.0
+    },
+    {
+      "type": "nurse_call",
+      "confidence": 0.95,
+      "x": 57.0,
+      "y": 287.0,
+      "width": 42.0,
+      "height": 25.0
+    },
+    {
+      "type": "recessed_down_light",
+      "confidence": 0.94,
+      "x": 74.0,
+      "y": 322.0,
+      "width": 32.0,
+      "height": 30.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.93,
+      "x": 60.0,
+      "y": 374.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.96,
+      "x": 57.0,
+      "y": 391.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.98,
+      "x": 242.0,
+      "y": 146.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.97,
+      "x": 242.0,
+      "y": 328.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.95,
+      "x": 310.0,
+      "y": 220.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "tv_outlet",
+      "confidence": 0.96,
+      "x": 325.0,
+      "y": 250.0,
+      "width": 28.0,
+      "height": 26.0
+    },
+    {
+      "type": "smoke_detector",
+      "confidence": 0.94,
+      "x": 326.0,
+      "y": 287.0,
+      "width": 28.0,
+      "height": 28.0
+    },
+    {
+      "type": "emergency_light",
+      "confidence": 0.98,
+      "x": 207.0,
+      "y": 472.0,
+      "width": 36.0,
+      "height": 22.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.95,
+      "x": 271.0,
+      "y": 474.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.94,
+      "x": 159.0,
+      "y": 474.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.96,
+      "x": 104.0,
+      "y": 524.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.95,
+      "x": 201.0,
+      "y": 524.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.97,
+      "x": 622.0,
+      "y": 77.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.94,
+      "x": 649.0,
+      "y": 110.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "recessed_down_light",
+      "confidence": 0.96,
+      "x": 618.0,
+      "y": 140.0,
+      "width": 32.0,
+      "height": 30.0
+    },
+    {
+      "type": "nurse_call",
+      "confidence": 0.95,
+      "x": 620.0,
+      "y": 194.0,
+      "width": 42.0,
+      "height": 25.0
+    },
+    {
+      "type": "telephone_outlet",
+      "confidence": 0.94,
+      "x": 636.0,
+      "y": 220.0,
+      "width": 26.0,
+      "height": 25.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.96,
+      "x": 622.0,
+      "y": 260.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.93,
+      "x": 651.0,
+      "y": 292.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "recessed_down_light",
+      "confidence": 0.95,
+      "x": 618.0,
+      "y": 322.0,
+      "width": 32.0,
+      "height": 30.0
+    },
+    {
+      "type": "nurse_call",
+      "confidence": 0.96,
+      "x": 620.0,
+      "y": 374.0,
+      "width": 42.0,
+      "height": 25.0
+    },
+    {
+      "type": "telephone_outlet",
+      "confidence": 0.93,
+      "x": 636.0,
+      "y": 402.0,
+      "width": 26.0,
+      "height": 25.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.98,
+      "x": 449.0,
+      "y": 146.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.97,
+      "x": 449.0,
+      "y": 328.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "receptacle_duplex",
+      "confidence": 0.96,
+      "x": 366.0,
+      "y": 220.0,
+      "width": 40.0,
+      "height": 26.0
+    },
+    {
+      "type": "tv_outlet",
+      "confidence": 0.95,
+      "x": 366.0,
+      "y": 250.0,
+      "width": 28.0,
+      "height": 26.0
+    },
+    {
+      "type": "smoke_detector",
+      "confidence": 0.94,
+      "x": 366.0,
+      "y": 287.0,
+      "width": 28.0,
+      "height": 28.0
+    },
+    {
+      "type": "emergency_light",
+      "confidence": 0.97,
+      "x": 468.0,
+      "y": 472.0,
+      "width": 36.0,
+      "height": 22.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.94,
+      "x": 428.0,
+      "y": 474.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "switch",
+      "confidence": 0.95,
+      "x": 549.0,
+      "y": 474.0,
+      "width": 18.0,
+      "height": 20.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.96,
+      "x": 497.0,
+      "y": 524.0,
+      "width": 26.0,
+      "height": 26.0
+    },
+    {
+      "type": "ceiling_mounted_light",
+      "confidence": 0.95,
+      "x": 596.0,
+      "y": 524.0,
+      "width": 26.0,
+      "height": 26.0
+    }
+  ]
+}
