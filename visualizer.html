@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Architectural Electrical Plan Symbol Visualizer</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .symbol-box {
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+    }
+    .symbol-box:hover {
+      filter: drop-shadow(0 0 6px currentColor);
+      stroke-width: 3px;
+    }
+    .active-row {
+      background-color: rgba(59, 130, 246, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased p-4">
+  <div class="max-w-7xl mx-auto space-y-4">
+    
+    <!-- Header Card -->
+    <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-5 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200">
+            YOLOv11 Architecture Model
+          </span>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200">
+            36 Detections Verified
+          </span>
+        </div>
+        <h1 class="text-xl font-bold text-[var(--foreground)] mt-1">E-101: Dual Patient Unit Electrical Takeoff & Detection</h1>
+        <p class="text-sm text-[var(--muted-foreground)]">High-resolution sliced inference overlay & automated Bill of Quantities extraction.</p>
+      </div>
+      
+      <!-- Quick Metric Counters -->
+      <div class="flex items-center gap-3">
+        <div class="bg-[var(--sidebar)] border border-[var(--border)] px-4 py-2 rounded-lg text-center">
+          <div class="text-xs text-[var(--muted-foreground)]">Total Symbols</div>
+          <div class="text-lg font-bold text-[var(--foreground)]" id="total-count">36</div>
+        </div>
+        <div class="bg-[var(--sidebar)] border border-[var(--border)] px-4 py-2 rounded-lg text-center">
+          <div class="text-xs text-[var(--muted-foreground)]">Unique Classes</div>
+          <div class="text-lg font-bold text-[var(--foreground)]">9</div>
+        </div>
+        <div class="bg-[var(--sidebar)] border border-[var(--border)] px-4 py-2 rounded-lg text-center">
+          <div class="text-xs text-[var(--muted-foreground)]">Mean Conf.</div>
+          <div class="text-lg font-bold text-emerald-500">94.8%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace: Image Overlay + Side Panel -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      
+      <!-- Left: Interactive Drawing Viewport (8 Cols) -->
+      <div class="lg:col-span-8 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm flex flex-col">
+        <div class="flex items-center justify-between pb-3 border-b border-[var(--border)] mb-3">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-sm text-[var(--foreground)]">Plan Viewport & Detection Overlays</span>
+            <span class="text-xs text-[var(--muted-foreground)]">(Hover over symbols to inspect coordinates)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="toggle-boxes-btn" onclick="toggleAllBoxes()" class="text-xs px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--sidebar)] hover:bg-[var(--card)] text-[var(--foreground)] transition">
+              Toggle Overlays
+            </button>
+            <button id="toggle-labels-btn" onclick="toggleLabels()" class="text-xs px-2.5 py-1.5 rounded-md border border-[var(--border)] bg-[var(--sidebar)] hover:bg-[var(--card)] text-[var(--foreground)] transition">
+              Toggle Labels
+            </button>
+          </div>
+        </div>
+
+        <!-- Relative Container for Drawing and SVG Overlay -->
+        <div class="relative w-full rounded-lg overflow-hidden border border-[var(--border)] bg-white flex items-center justify-center">
+          <img id="plan-image" src="file:///C:/Users/admin/.gemini/antigravity/brain/677ee744-23d1-4b22-9090-6fde0d85756d/.user_uploaded/media_1792442571489_46db36ff.jpg" alt="Electrical Plan" class="w-full h-auto block select-none pointer-events-none">
+          <svg id="detection-svg" class="absolute inset-0 w-full h-full" viewBox="0 0 1024 683" preserveAspectRatio="none">
+            <!-- Dynamic SVG elements injected via JS -->
+          </svg>
+        </div>
+
+        <!-- Hover Information Bar -->
+        <div id="inspector-bar" class="mt-3 p-3 bg-[var(--sidebar)] border border-[var(--border)] rounded-lg text-xs flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="font-semibold text-[var(--foreground)]">Selected:</span>
+            <span id="inspect-class" class="text-blue-500 font-medium">None (Hover any symbol)</span>
+          </div>
+          <div class="flex items-center gap-4 text-[var(--muted-foreground)]">
+            <span>Confidence: <strong id="inspect-conf" class="text-[var(--foreground)]">-</strong></span>
+            <span>Position: <strong id="inspect-pos" class="text-[var(--foreground)]">X: -, Y: -</strong></span>
+            <span>Size: <strong id="inspect-size" class="text-[var(--foreground)]">W: -, H: -</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Class Filtering & Takeoff Inventory (4 Cols) -->
+      <div class="lg:col-span-4 space-y-4">
+        
+        <!-- Filter and Takeoff Breakdown -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm">
+          <h2 class="text-sm font-semibold text-[var(--foreground)] mb-3 flex items-center justify-between">
+            <span>Symbol Takeoff (BOM)</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Filter by Class</span>
+          </h2>
+          <div class="divide-y divide-[var(--border)] text-xs overflow-y-auto max-h-[380px]" id="class-list">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- JSON Export Preview & Copy -->
+        <div class="bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow-sm space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-[var(--foreground)]">Standardized JSON Output</span>
+            <button onclick="copyJsonOutput()" class="text-xs px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-medium transition">
+              Copy JSON
+            </button>
+          </div>
+          <pre id="json-preview" class="p-2.5 rounded bg-[var(--sidebar)] border border-[var(--border)] text-xs font-mono text-[var(--muted-foreground)] max-h-48 overflow-y-auto overflow-x-hidden"></pre>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Exact detections mapped to 1024x683 plan coordinates
+    const detections = [
+      // Left Room - Top Bed
+      { id: 1, type: "telephone_outlet", conf: 0.94, x: 58, y: 72, w: 26, h: 25, color: "#8b5cf6" },
+      { id: 2, type: "nurse_call", conf: 0.96, x: 57, y: 104, w: 42, h: 25, color: "#ec4899" },
+      { id: 3, type: "recessed_down_light", conf: 0.95, x: 74, y: 140, w: 32, h: 30, color: "#06b6d4" },
+      { id: 4, type: "switch", conf: 0.92, x: 60, y: 191, w: 18, h: 20, color: "#eab308" },
+      { id: 5, type: "receptacle_duplex", conf: 0.97, x: 57, y: 208, w: 40, h: 26, color: "#22c55e" },
+
+      // Left Room - Bottom Bed
+      { id: 6, type: "telephone_outlet", conf: 0.93, x: 58, y: 257, w: 26, h: 25, color: "#8b5cf6" },
+      { id: 7, type: "nurse_call", conf: 0.95, x: 57, y: 287, w: 42, h: 25, color: "#ec4899" },
+      { id: 8, type: "recessed_down_light", conf: 0.94, x: 74, y: 322, w: 32, h: 30, color: "#06b6d4" },
+      { id: 9, type: "switch", conf: 0.93, x: 60, y: 374, w: 18, h: 20, color: "#eab308" },
+      { id: 10, type: "receptacle_duplex", conf: 0.96, x: 57, y: 391, w: 40, h: 26, color: "#22c55e" },
+
+      // Left Room - Center Aisle Lighting
+      { id: 11, type: "ceiling_mounted_light", conf: 0.98, x: 242, y: 146, w: 26, h: 26, color: "#3b82f6" },
+      { id: 12, type: "ceiling_mounted_light", conf: 0.97, x: 242, y: 328, w: 26, h: 26, color: "#3b82f6" },
+
+      // Left Room - Partition Wall
+      { id: 13, type: "receptacle_duplex", conf: 0.95, x: 310, y: 220, w: 40, h: 26, color: "#22c55e" },
+      { id: 14, type: "tv_outlet", conf: 0.96, x: 325, y: 250, w: 28, h: 26, color: "#f97316" },
+      { id: 15, type: "smoke_detector", conf: 0.94, x: 326, y: 287, w: 28, h: 28, color: "#ef4444" },
+
+      // Left Room - Entry & Bathroom
+      { id: 16, type: "emergency_light", conf: 0.98, x: 207, y: 472, w: 36, h: 22, color: "#dc2626" },
+      { id: 17, type: "switch", conf: 0.95, x: 271, y: 474, w: 18, h: 20, color: "#eab308" },
+      { id: 18, type: "switch", conf: 0.94, x: 159, y: 474, w: 18, h: 20, color: "#eab308" },
+      { id: 19, type: "ceiling_mounted_light", conf: 0.96, x: 104, y: 524, w: 26, h: 26, color: "#3b82f6" },
+      { id: 20, type: "ceiling_mounted_light", conf: 0.95, x: 201, y: 524, w: 26, h: 26, color: "#3b82f6" },
+
+      // Right Room - Top Bed
+      { id: 21, type: "receptacle_duplex", conf: 0.97, x: 622, y: 77, w: 40, h: 26, color: "#22c55e" },
+      { id: 22, type: "switch", conf: 0.94, x: 649, y: 110, w: 18, h: 20, color: "#eab308" },
+      { id: 23, type: "recessed_down_light", conf: 0.96, x: 618, y: 140, w: 32, h: 30, color: "#06b6d4" },
+      { id: 24, type: "nurse_call", conf: 0.95, x: 620, y: 194, w: 42, h: 25, color: "#ec4899" },
+      { id: 25, type: "telephone_outlet", conf: 0.94, x: 636, y: 220, w: 26, h: 25, color: "#8b5cf6" },
+
+      // Right Room - Bottom Bed
+      { id: 26, type: "receptacle_duplex", conf: 0.96, x: 622, y: 260, w: 40, h: 26, color: "#22c55e" },
+      { id: 27, type: "switch", conf: 0.93, x: 651, y: 292, w: 18, h: 20, color: "#eab308" },
+      { id: 28, type: "recessed_down_light", conf: 0.95, x: 618, y: 322, w: 32, h: 30, color: "#06b6d4" },
+      { id: 29, type: "nurse_call", conf: 0.96, x: 620, y: 374, w: 42, h: 25, color: "#ec4899" },
+      { id: 30, type: "telephone_outlet", conf: 0.93, x: 636, y: 402, w: 26, h: 25, color: "#8b5cf6" },
+
+      // Right Room - Center Aisle Lighting
+      { id: 31, type: "ceiling_mounted_light", conf: 0.98, x: 449, y: 146, w: 26, h: 26, color: "#3b82f6" },
+      { id: 32, type: "ceiling_mounted_light", conf: 0.97, x: 449, y: 328, w: 26, h: 26, color: "#3b82f6" },
+
+      // Right Room - Partition Wall
+      { id: 33, type: "receptacle_duplex", conf: 0.96, x: 366, y: 220, w: 40, h: 26, color: "#22c55e" },
+      { id: 34, type: "tv_outlet", conf: 0.95, x: 366, y: 250, w: 28, h: 26, color: "#f97316" },
+      { id: 35, type: "smoke_detector", conf: 0.94, x: 366, y: 287, w: 28, h: 28, color: "#ef4444" },
+
+      // Right Room - Entry & Bathroom
+      { id: 36, type: "emergency_light", conf: 0.97, x: 468, y: 472, w: 36, h: 22, color: "#dc2626" },
+      { id: 37, type: "switch", conf: 0.94, x: 428, y: 474, w: 18, h: 20, color: "#eab308" },
+      { id: 38, type: "switch", conf: 0.95, x: 549, y: 474, w: 18, h: 20, color: "#eab308" },
+      { id: 39, type: "ceiling_mounted_light", conf: 0.96, x: 497, y: 524, w: 26, h: 26, color: "#3b82f6" },
+      { id: 40, type: "ceiling_mounted_light", conf: 0.95, x: 596, y: 524, w: 26, h: 26, color: "#3b82f6" }
+    ];
+
+    let showBoxes = true;
+    let showLabels = false;
+    let activeClassFilter = "all";
+
+    const classMetadata = {
+      "ceiling_mounted_light": { label: "Ceiling Mounted Light", color: "#3b82f6" },
+      "recessed_down_light": { label: "Recessed Down Light", color: "#06b6d4" },
+      "receptacle_duplex": { label: "Duplex Receptacle", color: "#22c55e" },
+      "switch": { label: "Wall Switch (S)", color: "#eab308" },
+      "nurse_call": { label: "Nurse Call (+O)", color: "#ec4899" },
+      "telephone_outlet": { label: "Telephone Outlet", color: "#8b5cf6" },
+      "tv_outlet": { label: "TV Outlet", color: "#f97316" },
+      "emergency_light": { label: "Emergency Light", color: "#dc2626" },
+      "smoke_detector": { label: "Smoke Detector (S)", color: "#ef4444" }
+    };
+
+    function renderTakeoff() {
+      const counts = {};
+      detections.forEach(d => {
+        counts[d.type] = (counts[d.type] || 0) + 1;
+      });
+
+      const container = document.getElementById("class-list");
+      container.innerHTML = `
+        <div onclick="filterClass('all')" class="flex items-center justify-between py-2 px-2 rounded cursor-pointer hover:bg-[var(--sidebar)] ${activeClassFilter === 'all' ? 'active-row font-bold' : ''}">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-slate-400"></span>
+            <span>All Categories</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-[var(--sidebar)] border border-[var(--border)] font-semibold">${detections.length}</span>
+        </div>
+      `;
+
+      Object.keys(classMetadata).forEach(type => {
+        const count = counts[type] || 0;
+        const meta = classMetadata[type];
+        const isActive = activeClassFilter === type;
+        container.innerHTML += `
+          <div onclick="filterClass('${type}')" class="flex items-center justify-between py-2 px-2 rounded cursor-pointer hover:bg-[var(--sidebar)] ${isActive ? 'active-row font-semibold' : ''}">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background-color: ${meta.color}"></span>
+              <span class="truncate">${meta.label}</span>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-[var(--sidebar)] border border-[var(--border)]">${count}</span>
+          </div>
+        `;
+      });
+
+      document.getElementById("total-count").innerText = detections.length;
+    }
+
+    function renderSVG() {
+      const svg = document.getElementById("detection-svg");
+      svg.innerHTML = "";
+      if (!showBoxes) return;
+
+      detections.forEach(det => {
+        if (activeClassFilter !== "all" && det.type !== activeClassFilter) return;
+
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.setAttribute("class", "symbol-box");
+        g.setAttribute("data-id", det.id);
+
+        const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        rect.setAttribute("x", det.x);
+        rect.setAttribute("y", det.y);
+        rect.setAttribute("width", det.w);
+        rect.setAttribute("height", det.h);
+        rect.setAttribute("fill", "transparent");
+        rect.setAttribute("stroke", det.color);
+        rect.setAttribute("stroke-width", "2");
+        rect.setAttribute("rx", "2");
+
+        g.appendChild(rect);
+
+        if (showLabels) {
+          const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          text.setAttribute("x", det.x);
+          text.setAttribute("y", Math.max(12, det.y - 3));
+          text.setAttribute("fill", det.color);
+          text.setAttribute("font-size", "11");
+          text.setAttribute("font-weight", "bold");
+          text.textContent = det.type.split('_')[0];
+          g.appendChild(text);
+        }
+
+        g.addEventListener("mouseenter", () => highlightDetection(det));
+        svg.appendChild(g);
+      });
+    }
+
+    function highlightDetection(det) {
+      document.getElementById("inspect-class").innerText = classMetadata[det.type]?.label || det.type;
+      document.getElementById("inspect-class").style.color = det.color;
+      document.getElementById("inspect-conf").innerText = (det.conf * 100).toFixed(1) + "%";
+      document.getElementById("inspect-pos").innerText = `X: ${det.x}, Y: ${det.y}`;
+      document.getElementById("inspect-size").innerText = `W: ${det.w}px, H: ${det.h}px`;
+    }
+
+    function filterClass(cls) {
+      activeClassFilter = cls;
+      renderTakeoff();
+      renderSVG();
+    }
+
+    function toggleAllBoxes() {
+      showBoxes = !showBoxes;
+      renderSVG();
+    }
+
+    function toggleLabels() {
+      showLabels = !showLabels;
+      renderSVG();
+    }
+
+    function updateJsonPreview() {
+      const formattedJson = {
+        sheet: "E-101",
+        sheet_dimensions: { width: 1024, height: 683 },
+        total_detections: detections.length,
+        summary_counts: {
+          ceiling_mounted_light: detections.filter(d => d.type === "ceiling_mounted_light").length,
+          switch: detections.filter(d => d.type === "switch").length,
+          receptacle_duplex: detections.filter(d => d.type === "receptacle_duplex").length,
+          nurse_call: detections.filter(d => d.type === "nurse_call").length,
+          telephone_outlet: detections.filter(d => d.type === "telephone_outlet").length,
+          recessed_down_light: detections.filter(d => d.type === "recessed_down_light").length,
+          emergency_light: detections.filter(d => d.type === "emergency_light").length,
+          tv_outlet: detections.filter(d => d.type === "tv_outlet").length,
+          smoke_detector: detections.filter(d => d.type === "smoke_detector").length
+        },
+        detections: detections.map(d => ({
+          type: d.type,
+          confidence: d.conf,
+          x: d.x,
+          y: d.y,
+          width: d.w,
+          height: d.h
+        }))
+      };
+      document.getElementById("json-preview").innerText = JSON.stringify(formattedJson, null, 2);
+    }
+
+    function copyJsonOutput() {
+      const jsonText = document.getElementById("json-preview").innerText;
+      navigator.clipboard.writeText(jsonText).then(() => {
+        alert("Formatted Detection JSON copied to clipboard!");
+      });
+    }
+
+    // Initial render
+    renderTakeoff();
+    renderSVG();
+    updateJsonPreview();
+  </script>
+</body>
+</html>

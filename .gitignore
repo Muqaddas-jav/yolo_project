@@ -23,33 +23,16 @@ wheels/
 .installed.cfg
 *.egg
 
-# PyTorch / YOLO
-*.pt
-*.onnx
+# Caches & Runs
+*.cache
 runs/
 wandb/
+yolo11n.pt
 
-# Data & Output (keep samples, ignore huge dumps)
-output/*
-!output/.gitkeep
-!output/sample_detection.json
-data/tiles/images/train/*
-data/tiles/images/val/*
-data/tiles/labels/train/*
-data/tiles/labels/val/*
-!data/tiles/images/train/.gitkeep
-!data/tiles/images/val/.gitkeep
-!data/tiles/labels/train/.gitkeep
-!data/tiles/labels/val/.gitkeep
-
-# IDEs
+# IDEs & OS
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# OS
 .DS_Store
 Thumbs.db
-
-*.cache
